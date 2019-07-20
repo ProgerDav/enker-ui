@@ -18,7 +18,7 @@ export default ({user, location}) => (
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
           {
-            // user.data ? (
+            user.data ? (
               <span>
                 <span className="ml-4 nav-icon">
                   <LinkContainer to="/profile">
@@ -36,17 +36,20 @@ export default ({user, location}) => (
                   </LinkContainer>
                 </span>
               </span>
-            // ) : null
+             ) : null
           }
         </Nav>
       </Navbar.Collapse>
       {
-        /**
-         * TODO: When user logged in
-         * 1. Text Hello [user first name]!
-         * 2. Button to logout user
-         * 3. If connected to peer a button to chat
-         */
+        user.data ? (
+          <span>
+            <span className="ml-auto">
+              {/* <LinkContainer to="/profile"> */}
+                <span className='text-white'>Hello {user.data.firstName}</span>
+              {/* </LinkContainer> */}
+            </span>
+          </span>
+        ) : null
       }
     </Navbar>
   </div>
