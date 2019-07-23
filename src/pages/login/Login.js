@@ -12,8 +12,8 @@ export default class Login extends Component {
     //set state and form handlers
     super(props);
     this.state = {
-      email: 'davit@gmail.com',
-      password: 'password'
+      email: '',
+      password: ''
     }
   }
   handleSubmit(e){
@@ -39,8 +39,8 @@ export default class Login extends Component {
         <Form onSubmit={e => this.handleSubmit(e)}>
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" />
-          <Form.Text onChange={e => this.handleChange('email', e.target.value)} value={() => this.state.email} className="text-muted">
+          <Form.Control type="email" placeholder="Enter email" onChange={e => this.handleChange('email', e.target.value)} value={this.state.email} />
+          <Form.Text className="text-muted">
             We'll never share your email with anyone else.
           </Form.Text>
         </Form.Group>
