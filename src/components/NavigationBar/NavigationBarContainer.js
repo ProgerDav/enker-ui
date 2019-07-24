@@ -5,7 +5,8 @@ import { logoutUser } from '../../redux/actions';
 import NavigationBar from './NavigationBar';
 
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user,
+  withUser: state.network.withUser
 })
 
 const mapDispatchToProps = dispatch => {

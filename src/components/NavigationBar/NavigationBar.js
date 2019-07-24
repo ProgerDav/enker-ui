@@ -9,7 +9,7 @@ import SearchIcon from './SearchIcon';
 
 import './navigationbar.css';
 
-export default ({ user, location, logoutUser }) => (
+export default ({ user, location, logoutUser, withUser }) => (
   <div className="global-nav" >
     <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
       <LinkContainer to="/">
@@ -43,10 +43,11 @@ export default ({ user, location, logoutUser }) => (
       {
         user.data ? (
           <span className="ml-auto">
-            <span className='text-white'>Hello {user.data.firstName}  <Button variant='danger' onClick={() => logoutUser(user)}>Log Out</Button></span>
+            <span className='text-white'>Hello {user.data.firstName}  <Button variant='danger' onClick={() => logoutUser(user.data)}>Log Out</Button></span>
           </span>
         ) : null
       }
+      { withUser ? <LinkContainer to="/network"><Button className="ml-2" variant="outline-success">CHAT!</Button></LinkContainer> : null}
     </Navbar>
   </div >
 );
