@@ -47,10 +47,6 @@ class Search extends React.Component {
         this.query();
       })
     });
-    // Socket.users.on('user_login', user => {
-    //   console.log('test_login');
-    //   this.query(this.state.textSearch);
-    // })
   }
   onStudentLoggedOut() {
     // TODO: Socket event handler if user logged out - run query

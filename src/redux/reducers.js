@@ -31,7 +31,7 @@ const network = (state = {withUser: null, receiver: false}, action) => {
   switch(action.type) {
     case 'START_CHAT':
       return { ...state, withUser: action.withUser }
-    case 'IM_THE_RECEIVE':
+    case 'IM_THE_RECEIVER':
       return { ...state, receiver: true }
     case 'STOP_CHAT':
     case 'LOGOUT_USER':

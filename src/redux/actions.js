@@ -40,7 +40,7 @@ export const loginUser = (email, password) => {
           user.emit('login', { email, password });
           // user.on('user_login', data => console.log(data));
           user.on('start-chat', fromUser => {
-            console.log('start-chat', fromUser);
+            // console.log('start-chat', fromUser);
             startChat(fromUser)(dispatch);
             dispatch(imReceiver());
           });

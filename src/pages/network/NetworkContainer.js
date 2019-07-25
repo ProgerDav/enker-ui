@@ -6,6 +6,9 @@ const mapStateToProps = state => ({
   /**
    * TODO: pass in logged in user, and peer user
    */
+  user: state.user.data,
+  withUser: state.network.withUser,
+  receiver: state.network.receiver
 });
 
 const mapDispatchToProps = dispatch => ({})
