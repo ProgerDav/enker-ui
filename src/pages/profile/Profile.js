@@ -13,8 +13,10 @@ class Profile extends Component {
     // const { email, firstname, lastname } = this.props.user;
     this.state = {
       email: this.props.user ? this.props.user.email : '',
-      firstname: this.props.user ? this.props.user.firstname : '',
-      lastname: this.props.user ? this.props.user.lastname : '',
+      firstName: this.props.user ? this.props.user.firstName : '',
+      lastName: this.props.user ? this.props.user.lastName : '',
+      location: this.props.user ? this.props.user.location : '',
+      learningTargets: this.props.user ? this.props.user.learningTargets : '',
     }
   }
   handleSubmit(e) {
@@ -36,18 +38,30 @@ class Profile extends Component {
     }
     return (
       <Container className="mt-5">
-        <div>TODO: add Profile form page showing logged in user data</div>
-        <Form>
-          <Form.Group controlId="email">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control type="email" placeholder={this.state.email} onChange={e => this.handleChange('email', e.target.value)} value={this.state.email} />
-            <Form.Text className="text-muted">
-              My email
-            </Form.Text>
+        <h2 class="text-secondary">{this.state.firstName}'s Profile</h2>
+        <Form onSubmit={this.handleSubmit} className='mt-4'>
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label> First Name</Form.Label>
+            <Form.Control onChange={this.handleChange} type="email" disabled value={this.state.firstName} />
           </Form.Group>
-          <Form.Group controlId="firstname">
-            <Form.Label>Firstname</Form.Label>
-            <Form.Control type='text' placeholder={this.state.firstname} value={this.state.firstname} onChange={e => this.handleChange('firstname', e.target.value)} />
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>Last Name</Form.Label>
+            <Form.Control onChange={this.handleChange} type="email" disabled value={this.state.lastName} />
+          </Form.Group>
+
+          <Form.Group controlId="formBasicPassword">
+            <Form.Label>Email</Form.Label>
+            <Form.Control onChange={this.handleChange} type="email" disabled value={this.props.user && this.props.user.email} />
+          </Form.Group>
+
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>Learning Targets</Form.Label>
+            <Form.Control onChange={this.handleChange} type="email" disabled value={this.state.learningTargets} />
+          </Form.Group>
+
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>Location</Form.Label>
+            <Form.Control onChange={this.handleChange} type="email" disabled value={this.state.location} />
           </Form.Group>
         </Form>
       </Container>

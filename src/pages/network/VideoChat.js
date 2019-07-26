@@ -4,6 +4,9 @@ import { Button } from 'react-bootstrap';
 import callIcon from './phone-call.png';
 import endCallIcon from './end-call-icon.png';
 import LioWebRTC from 'liowebrtc';
+
+import Draggable from 'react-draggable';
+
 /**
  * VideoChat - WebRTC Workshop: will contain all the logic to start video chat with peer
  */
@@ -20,6 +23,7 @@ class VideoChat extends React.Component {
       inCall: false,
     };
     this.videoRef = React.createRef();
+    this.localVid = React.createRef();
     this.remoteVideos = {};
   }
   componentDidMount() {
@@ -59,7 +63,7 @@ class VideoChat extends React.Component {
   }
   addVideo = (stream, peer) => {
     this.setState({ peers: [...this.state.peers, peer] }, () => {
-      this.webrtc.attachStream(stream, this.remoteVideos[peer.id], {mirror: false});
+      this.webrtc.attachStream(stream, this.remoteVideos[peer.id], { mirror: false });
       this.setState({
         inCall: true
       });
@@ -93,38 +97,42 @@ class VideoChat extends React.Component {
     this.webrtc.joinRoom(this.state.roomID, (err, desc) => {
     });
   }
-  generateRemotes = () => this.state.peers.map((p) => (
-    <div key={p.id}>
-      <div id={/* The video container needs a special id */ `${this.webrtc.getContainerId(p)}`}>
-        <video
-          // Important: The video element needs both an id and ref
-          id={this.webrtc.getDomId(p)}
-          ref={(v) => this.remoteVideos[p.id] = v}
-        />
-      </div>
-      <p>{p.nick}</p>
-    </div>
-  ));
+  generateRemotes = () => {
+    return this.state.peers.map((p) => (
+      <Draggable>
+        <div key={p.id} ref={dragRef} style={{ opacity }}>
+          <div id={/* The video container needs a special id */ `${this.webrtc.getContainerId(p)}`}>
+            <video
+              // Important: The video element needs both an id and ref
+              id={this.webrtc.getDomId(p)}
+              ref={(v) => this.remoteVideos[p.id] = v}
+            />
+          </div>
+          <p>{p.nick}</p>
+        </div>
+      </Draggable>
+    ));
+  }
   render() {
     // TODO: render video element of user and peers
     return (
       <div>
         {this.generateRemotes()}
         <div>
-            <video
-              // height='auto'
-              autoPlay
-              controls
-              // Important: The local video element needs to have a ref
-              ref={(vid) => { this.localVid = vid; }}
-            />
-            <p>{this.state.nick}</p>
+          <video
+            // height='auto'
+            autoPlay
+            controls
+            // Important: The local video element needs to have a ref
+            ref={(vid) => { this.localVid = vid; }}
+          />
+          <p>{this.state.nick}</p>
         </div>
         <div className='position-absolute'>
           <Button disabled={this.state.inCall ? true : null} variant='link' onClick={() => this.startCall()}>
             <img width="45px" src={callIcon} alt="Call" />
           </Button>
-          <Button disabled={this.state.inCall ? null : true} variant='link' onClick={() => this.stopCall()}>
+          <Button disabled={this.state.inCall ? true : null} variant='link' onClick={() => this.stopCall()}>
             <img width="45px" src={endCallIcon} alt="Endcall" />
           </Button>
         </div>

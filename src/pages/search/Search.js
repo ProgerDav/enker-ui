@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Socket from '../../socket';
 
 
-import { Container, Form, Button, Col, Row, InputGroup, ListGroup, Badge, Tab } from 'react-bootstrap';
+import { Container, Form, Button, Col, Row, InputGroup, ListGroup, Badge, Tab, Spinner } from 'react-bootstrap';
 
 /**
  * React component to render search page
@@ -94,6 +94,7 @@ class Search extends React.Component {
           <Tab.Container id="search-results" defaultActiveKey="#user0">
             <Col>
               <ListGroup>
+                {this.state.studentsList.length === 0 && <Spinner style={{ margin: '0 auto' }} animation="border" variant="primary" />}
                 {this.state.studentsList.map((user, index) => (
                   <ListGroup.Item
                     eventKey={`#user${index}`}
@@ -113,7 +114,7 @@ class Search extends React.Component {
                     <div>Email: {user.email}</div>
                     <div>Learning Targets: {user.learningTargets.join(', ')}</div>
                     <div>Location: {user.location}</div>
-                    <Button className="mt-3" onClick={(e) => { e.preventDefault(); this.onstartChat(user) }}>Start Chat</Button>
+                    <Button disabled={!user.loggedIn ? true : null} className="mt-3" onClick={(e) => { e.preventDefault(); this.onstartChat(user) }}>Start Chat</Button>
                   </Tab.Pane>
                 ))}
               </Tab.Content>
