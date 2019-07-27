@@ -6,10 +6,15 @@ import VideoChat from './VideoChat';
 import './network.css';
 import Socket from '../../socket';
 
+import ReactQuill from 'react-quill'; // ES6
+import 'react-quill/dist/quill.snow.css'; // ES6
+import debounce from 'debounce';
+
 import { Widget, addResponseMessage } from 'react-chat-widget';
 
 import 'react-chat-widget/lib/styles.css';
 
+import Drawing from './Drawing';
 
 /**
  * Main React Component for the networking page (WYSIWIG, Chat, Video, Canvas)
@@ -19,8 +24,10 @@ class NetworkPage extends Component {
     //TODO: set state and handlers for chat message and WYSIWIG
     super(props);
     this.state = {
-      messages: [],
+      chatMessages: [],
+      editorText: '',
     };
+    this.handleEditorChange = this.handleEditorChange.bind(this);
   }
   handleNewUserMessage = (newMessage) => {
     // console.log(`New message incoming! ${newMessage}`);
@@ -34,15 +41,31 @@ class NetworkPage extends Component {
     Socket.connect(user => {
       user.on('new message', msg => {
         addResponseMessage(msg);
-        // this.setState({messages: this.state.messages.push(msg)});
+      });
+      user.on('editor-message', (fromUser, message) => {
+        console.log(message);
+        this.setState({
+          editorText: message
+        })
       });
     });
+
+  }
+  handleEditorChange(source, editor) {
+    console.log('source', source);
+    if (source === 'user') {
+      this.emitEditorMessage(editor.getContents());
+    }
+  }
+  emitEditorMessage(message) {
+    Socket.users.emit('editor-message', this.props.withUser, this.props.user, message);
   }
   componentWillUnmount() {
     // TODO: cleanup listeners for chat/editor sockets
     Socket.connect(user => {
-      user.removeListener('message');
+      user.removeListener('new message');
     });
+    Socket.users.removeListener('editor-message');
   }
   render() {
     if (!this.props.withUser) {
@@ -64,10 +87,14 @@ class NetworkPage extends Component {
             {/* <span>TODO: add tabs for Canvas and WYSIWIG</span> */}
             <Tabs defaultActiveKey='document'>
               <Tab eventKey="document" title="Document">
-                <h1>Doc</h1>
+                <ReactQuill
+                  id="chat"
+                  value={this.state.editorText}
+                  onChange={(content, delta, source, editor) => { debounce(this.handleEditorChange(source, editor)) }}
+                />
               </Tab>
               <Tab eventKey="canvas" title="Canvas">
-                <h1>Canvas</h1>
+                <Drawing withUser={this.props.withUser} currentUser={this.props.user} />
               </Tab>
             </Tabs>
           </Col>

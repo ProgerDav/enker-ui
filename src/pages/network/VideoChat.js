@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button } from 'react-bootstrap';
+import { Button, Badge } from 'react-bootstrap';
 import callIcon from './phone-call.png';
 import endCallIcon from './end-call-icon.png';
 import LioWebRTC from 'liowebrtc';
@@ -88,10 +88,10 @@ class VideoChat extends React.Component {
   }
   stopCall() {
     this.webrtc.leaveRoom();
-    this.setState({ inCall: false });
+    this.setState({
+      inCall: false,
+    })
   }
-
-
   readyToJoin = () => {
     // Starts the process of joining a room.
     this.webrtc.joinRoom(this.state.roomID, (err, desc) => {
@@ -100,15 +100,18 @@ class VideoChat extends React.Component {
   generateRemotes = () => {
     return this.state.peers.map((p) => (
       <Draggable>
-        <div key={p.id} ref={dragRef} style={{ opacity }}>
+        <div key={p.id}>
           <div id={/* The video container needs a special id */ `${this.webrtc.getContainerId(p)}`}>
             <video
               // Important: The video element needs both an id and ref
               id={this.webrtc.getDomId(p)}
               ref={(v) => this.remoteVideos[p.id] = v}
+              style={{ width: "100%", transform: "none" }}
             />
           </div>
-          <p>{p.nick}</p>
+          <div style={{ position: "absolute", top: "0", left: "0", padding: "10px" }}>
+            <Badge variant="info">{p.nick}</Badge>
+          </div>
         </div>
       </Draggable>
     ));
@@ -123,16 +126,19 @@ class VideoChat extends React.Component {
             // height='auto'
             autoPlay
             controls
+            width={this.state.inCall ? "50%" : "100%"} height="auto"
             // Important: The local video element needs to have a ref
             ref={(vid) => { this.localVid = vid; }}
           />
-          <p>{this.state.nick}</p>
+          <div style={{ position: "absolute", padding: "5px", alignSelf: "baseline" }}>
+            <Badge variant="info">{this.state.nick}</Badge>
+          </div>
         </div>
-        <div className='position-absolute'>
+        <div style={{position: "absolute", top: '50%'}}>
           <Button disabled={this.state.inCall ? true : null} variant='link' onClick={() => this.startCall()}>
             <img width="45px" src={callIcon} alt="Call" />
           </Button>
-          <Button disabled={this.state.inCall ? true : null} variant='link' onClick={() => this.stopCall()}>
+          <Button disabled={this.state.inCall ? null : true} variant='link' onClick={() => this.stopCall()}>
             <img width="45px" src={endCallIcon} alt="Endcall" />
           </Button>
         </div>

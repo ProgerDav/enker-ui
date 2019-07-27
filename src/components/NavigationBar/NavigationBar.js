@@ -47,7 +47,7 @@ export default ({ user, location, logoutUser, withUser }) => (
           </span>
         ) : null
       }
-      { withUser ? <LinkContainer to="/network"><Button className="ml-2" variant="outline-success">CHAT!</Button></LinkContainer> : null}
+      {withUser ? <LinkContainer to="/network"><Button className="ml-2" variant="outline-success">CHAT!</Button></LinkContainer> : null}
     </Navbar>
   </div >
 );
